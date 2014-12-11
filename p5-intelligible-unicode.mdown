@@ -1,0 +1,82 @@
+# An intelligible guide to Unicode in Perl 5
+
+## Perl strings
+
+Perl strings can hold all Unicode characters (up to the maximum code
+point U+10FFFF). Internally, Perl uses the variable-length
+encoding UTF-8 to represent strings, due to its space efficiency,
+and to the fact that it overlaps with ASCII up to character 127.
+
+Strings coming from the outside of your program (file names, file
+contents, command-line arguments, etc.), and even the text of your
+program itself, are always just streams of bytes (valued between 0 and
+255), because that's just how programs communicate. This is why they
+need to be decoded when they are expected to contain Unicode characters.
+In Perl parlance, decoding is precisely the operation that converts a
+stream of bytes to a stream of Unicode characters. There are various
+ways to do this.
+
+## The `unicode_strings` feature
+
+First things first, how do you set up a Perl program or module to avoid
+some of the most unpleasant surprises with dealing with Unicode strings?
+
+The simplest way to do that is to start your program with
+
+    use 5.14.0;
+
+or even better,
+
+    use 5.16.0;
+
+This tells Perl to discard the legacy semantics (known as the [Unicode
+Bug](https://metacpan.org/pod/distribution/perl/pod/perlunicode.pod#The-Unicode-Bug)
+with a capital B among perl gut hackers) that were making some of the
+string operations depending on the underlying "UTF-8 flag" that perl
+uses to track how strings are internally represented. In other words,
+using this minimal version requirement makes sure that operations on
+strings will be consistent with Unicode semantics, and that you won't
+have to bother about the internal representation of your strings.
+
+In more detail, this `use` declaration makes perl load the [`unicode_strings`
+feature](https://metacpan.org/pod/distribution/perl/regen/feature.pl#The-unicode_strings-feature)
+and puts it in effect for the rest of your file. (But not the packages
+it loads!)
+
+## The `-C` command-line switch
+
+## The `PERL_UNICODE` environment variable
+
+## Some Unicode warnings
+
+Those are in the `utf8` warning category, and its sub-categories.
+
+### Wide character in ...
+
+### Malformed UTF-8 character
+
+(mention also security issues with non-shortest forms)
+
+### ... does not map to Unicode
+
+### Code point is not Unicode, may not be portable
+
+### Unicode non-character is illegal for open interchange
+
+### Unicode surrogate is illegal in UTF-8
+
+## The `utf8` pragma
+
+## The `utf8::` encoding and decoding functions
+
+## The `utf8::` upgrading and downgrading functions
+
+## The difference between `utf8` and `Encode`
+
+## The `:utf8` PerlIO layer
+
+## The `:encoding(utf8)` PerlIO layer
+
+## Manipulating layers: `open()`, `use open`, `binmode`
+
+## The `unicode_eval` and `evalbytes` features, and the `utf8` pragma again
