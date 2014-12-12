@@ -43,7 +43,7 @@ feature](https://metacpan.org/pod/distribution/perl/regen/feature.pl#The-unicode
 and puts it in effect for the rest of your file. (But not the packages
 it loads!)
 
-On one-liners, you can use the handy shortcut `-E` instead of the full
+In one-liners, you can use the handy shortcut `-E` instead of the full
 `use` declaration.
 
 ## The `-C` command-line switch
@@ -90,9 +90,10 @@ string, and read a string containing one character, namely &#ff;.
 
 By default perl behaves as if `-C0` was given on the command-line, but
 you can override that default by setting the `PERL_UNICODE` environment
-variable before starting your program. Note that because this variable
+variable before starting your program. (It's not going to work if you
+set it once your program has started.) Note that because this variable
 mimics whatever comes after the `-C` on the command-line, having it
-unset, set to an empty string, or set to 0 enable actually three
+unset, set to an empty string, or set to 0, enable actually three
 completely different behaviours. (This is all documented in perlrun along
 the `-C` switch.)
 
@@ -131,6 +132,8 @@ not a valid UTF-8 encoded string:
     $ perl -E 'print "\xff"' | perl -CS -pE1 | xxd
     Malformed UTF-8 character (unexpected end of string) in print, <> line 1.
     0000000: ff                                       .
+
+In that case perl keeps the input unmodified and warns about it.
 
 ### "..." does not map to Unicode
 
