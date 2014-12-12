@@ -5,7 +5,7 @@
 Perl strings can hold all Unicode characters (up to the maximum code
 point U+10FFFF). Internally, Perl uses the variable-length
 encoding UTF-8 to represent strings, due to its space efficiency,
-and to the fact that it overlaps with ASCII up to character 127.
+and to the fact that it conveniently overlaps with ASCII up to character 127.
 
 Strings coming from the outside of your program (file names, file
 contents, command-line arguments, etc.), and even the text of your
@@ -21,11 +21,11 @@ ways to do this.
 First things first, how do you set up a Perl program or module to avoid
 some of the most unpleasant surprises with dealing with Unicode strings?
 
-The simplest way to do that is to start your program with
+The simplest way to do that is to start your program with:
 
     use 5.14.0;
 
-or even better,
+or even better, if you have a perl recent enough:
 
     use 5.16.0;
 
@@ -43,35 +43,164 @@ feature](https://metacpan.org/pod/distribution/perl/regen/feature.pl#The-unicode
 and puts it in effect for the rest of your file. (But not the packages
 it loads!)
 
+On one-liners, you can use the handy shortcut `-E` instead of the full
+`use` declaration.
+
 ## The `-C` command-line switch
 
-## The `PERL_UNICODE` environment variable
+In one-liners, you can use the `-C` command-line switch to tell perl
+that Unicode is to be expected (or not) from some part of the program
+environment. All forms of the switch are documented in [the `perlrun` man
+page](https://metacpan.org/pod/distribution/perl/pod/perlrun.pod#C-number-list),
+but the more interesting for our purposes is `-CS`, that says that
+standard input, output and error are all three expected to get
+Unicode data encoded in UTF-8. (The opposite is `-C0`, that will ensure
+that *nothing* is expected to get Unicode data by default.)
+
+Here are some examples. Let's take character U+00FF, also known as
+LATIN SMALL LETTER Y WITH DIAERESIS (&#xff;), and see what perl is
+actually outputting by inspecting its standard output with the hex
+dumper `xxd(1)`:
+
+    $ perl -E 'print "\xff"' | xxd
+    0000000: ff                                       .
+    $ perl -CS -E 'print "\xff"' | xxd
+    0000000: c3bf                                     ..
+
+Without `-CS`, perl outputs the single byte 0xff, which is not
+valid UTF-8. With it, perl outputs the correct UTF-8 encoding
+of the U+00FF character, which consists of the two bytes 0xc3
+and 0xbf, in that order. Hey, that works!
+
+Now the reverse. What does perl see when it reads the two bytes
+0xc3 and 0xbf?
+
+    $ perl -E 'print "\xc3\xbf"' | perl -E '$x = <>; printf "%d %x\n", length $x, ord $x'
+    2 c3
+    $ perl -E 'print "\xc3\xbf"' | perl -CS -E '$x = <>; printf "%d %x\n", length $x, ord $x'
+    1 ff
+
+In the first case, perl was told it was getting bytes, and that's
+what it got: two of them, in a two-character long string.
+
+In the second case, perl decoded those bytes as a UTF-8-encoded
+string, and read a string containing one character, namely &#ff;.
+
+### The `PERL_UNICODE` environment variable
+
+By default perl behaves as if `-C0` was given on the command-line, but
+you can override that default by setting the `PERL_UNICODE` environment
+variable before starting your program. Note that because this variable
+mimics whatever comes after the `-C` on the command-line, having it
+unset, set to an empty string, or set to 0 enable actually three
+completely different behaviours. (This is all documented in perlrun along
+the `-C` switch.)
 
 ## Some Unicode warnings
 
+Perl will emit various warning when it detects that you're mixing
+bytes and Unicode strings, or using Unicode in strange ways.
 Those are in the `utf8` warning category, and its sub-categories.
 
 ### Wide character in ...
 
+Let's go back to our previous example. We were playing with U+00FF,
+but let's move on to its more modern form, U+0133, LATIN SMALL LIGATURE IJ
+(&#x133; -- yes, that's actually one character). The UTF-8 encoded
+representation of this character is the two bytes 0xc4 and 0xb3,
+as shown below:
+
+    $ perl -CS -E 'print "\x{133}"' | xxd
+    0000000: c4b3                                     ..
+
+But what happens if we forget the `-CS`? That would mean that perl was
+expecting bytes on its standard output, but bytes are by definition
+between 0 and 0xff, and thus 0x133 does not fit. However perl will
+encode the character to UTF-8, and warn you about that:
+
+    $ perl -E 'print "\x{133}"' | xxd
+    Wide character in print at -e line 1.
+    0000000: c4b3                                     ..
+
 ### Malformed UTF-8 character
 
-(mention also security issues with non-shortest forms)
+What happens if you feed perl something that you expect to be proper
+UTF-8, but isn't? We saw for example that the single byte 0xff is
+not a valid UTF-8 encoded string:
 
-### ... does not map to Unicode
+    $ perl -E 'print "\xff"' | perl -CS -pE1 | xxd
+    Malformed UTF-8 character (unexpected end of string) in print, <> line 1.
+    0000000: ff                                       .
 
-### Code point is not Unicode, may not be portable
+### "..." does not map to Unicode
 
-### Unicode non-character is illegal for open interchange
+There are many interesting ways to come up with malformed UTF-8. Here's
+one of my favorites. The backslash character \ is U+005C is Unicode, so
+in UTF-8 it is represented by the single byte 0x5c. However, due to the
+rules of UTF-8 encoding, it *could* be represented as well by the two
+bytes 0xc1 0x9c. (This is known as a *non-shortest form*, and
+non-shortest forms are actually illegal UTF-8). This one-liner
+demonstrates that perl is actually quite strict when decoding UTF-8:
 
-### Unicode surrogate is illegal in UTF-8
+    $ perl -E 'print "\xc1\x9c"' | perl -CS -wpE1 | xxd
+    utf8 "\xC1" does not map to Unicode, <> line 1.
+    0000000: c19c                                     ..
+
+Note that `-w` is needed here to turn on optional warnings.
+
+Why is this important? Because if Perl were more lax in decoding, it
+could render a backslash here, but fail detecting it when naively
+scanning the string for the byte 0x5c. Several security vulnerabilities
+used code injection via UTF-8 non-shortest forms to bypass XSS scanning
+mechanisms or similar. Be glad Perl protects automatically you from
+those.
 
 ## The `utf8` pragma
 
+The *sole* use of the `utf8` pragma, as in:
+
+    use utf8;
+
+at the top of your file, is to tell perl that the rest of the file,
+notably the string literals, is encoded in UTF-8. That's all. (My
+personal advice, however, is to avoid putting UTF-8 in your files,
+unless you're extra-sure it's not going to be mangled by editors,
+terminals, and co-workers.)
+
 ## The `utf8::` encoding and decoding functions
+
+Perl has two built-in functions, `utf8::encode` and `utf8::decode`,
+that handle the low-level encoding and decoding to/from UTF-8.
+(Note that you don't need to `use utf8` to load them; they're always
+available, like all built-ins.) What does that mean? Going through
+the list of examples we've seen before:
+
+*Encoding* is converting to a stream of bytes, that you can
+then output to the exterior of your program:
+
+    $ perl -wE '$x="\xff";utf8::encode($x);print $x' | xxd
+    0000000: c3bf                                     ..
+    $ perl -wE '$x="\x{133}";utf8::encode($x);print $x' | xxd
+    0000000: c4b3                                     ..
+
+*Decoding* is converting *from* a stream of bytes, into Unicode
+characters (if possible):
+
+    $ perl -wE '$x="\xc3\xbf";utf8::decode($x);printf "%d %x\n", length $x, ord $x'
+    1 ff
+    $ perl -wE '$x="\xc4\xb3";utf8::decode($x);printf "%d %x\n", length $x, ord $x'
+    1 133
+
+Those functions are quite low-level: they do not warn, perform only basic
+checks, and are generally to be manipulated with caution. For more
+high-level encoding and decoding primitives, look at the
+[Encode](https://metacpan.org/pod/Encode) module.
 
 ## The `utf8::` upgrading and downgrading functions
 
-## The difference between `utf8` and `Encode`
+Those ones are *even more* low-level.
+
+## The  `Encode::_utf8_on` and `Encode::_utf8_off` functions
 
 ## The `:utf8` PerlIO layer
 
