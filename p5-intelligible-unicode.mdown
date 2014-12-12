@@ -212,3 +212,9 @@ Those ones are *even more* low-level.
 ## Manipulating layers: `open()`, `use open`, `binmode`
 
 ## The `unicode_eval` and `evalbytes` features, and the `utf8` pragma again
+
+## Dealing with Unicode strings
+
+### Case-folding and the `fc()` function
+
+### The regular expression flag `/a`
