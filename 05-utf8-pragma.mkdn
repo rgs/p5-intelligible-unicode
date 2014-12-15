@@ -1,0 +1,11 @@
+# The `utf8` pragma
+
+The *sole* use of the `utf8` pragma, as in:
+
+    use utf8;
+
+at the top of your file, is to tell perl that the rest of the file,
+notably the string literals, is encoded in UTF-8. That's all. (My
+personal advice, however, is to avoid putting UTF-8 in your files,
+unless you're extra-sure it's not going to be mangled by editors,
+terminals, and co-workers.)

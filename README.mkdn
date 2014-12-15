@@ -1,0 +1,25 @@
+# An intelligible guide to Unicode in Perl 5
+
+This guide should help you understand how Unicode works in Perl 5. Feel free
+to improve it by opening issues or submitting a pull request.
+
+You can read each chapter by opening it or using the following links:
+
+* [01: Perl strings](01-Perl-strings.mkdn)
+* [02: unicode_strings](02-unicode_strings.mkdn)
+* [03: -C Command line option](03-dash-C-CLI.mkdn)
+* [04: Unicode warnings](04-Unicode-warnings.mkdn)
+* [05: The utf8 pragma](05-utf8-pragma.mkdn)
+* [06: Encoding and decoding functions](06-encoding-decoding-functions.mkdn)
+* [07: Upgrading and downgrading functions](07-upgrading-downgrading-functions.mkdn)
+
+Future chapters:
+
+* The  `Encode::_utf8_on` and `Encode::_utf8_off` functions
+* The `:utf8` PerlIO layer
+* The `:encoding(utf8)` PerlIO layer
+* Manipulating layers: `open()`, `use open`, `binmode`
+* The `unicode_eval` and `evalbytes` features, and the `utf8` pragma again
+* Dealing with Unicode strings
+    * Case-folding and the `fc()` function
+    * The regular expression flag `/a`

@@ -1,0 +1,28 @@
+# The `utf8::` encoding and decoding functions
+
+Perl has two built-in functions, `utf8::encode` and `utf8::decode`,
+that handle the low-level encoding and decoding to/from UTF-8.
+(Note that you don't need to `use utf8` to load them; they're always
+available, like all built-ins.) What does that mean? Going through
+the list of examples we've seen before:
+
+*Encoding* is converting to a stream of bytes, that you can
+then output to the exterior of your program:
+
+    $ perl -wE '$x="\xff";utf8::encode($x);print $x' | xxd
+    0000000: c3bf                                     ..
+    $ perl -wE '$x="\x{133}";utf8::encode($x);print $x' | xxd
+    0000000: c4b3                                     ..
+
+*Decoding* is converting *from* a stream of bytes, into Unicode
+characters (if possible):
+
+    $ perl -wE '$x="\xc3\xbf";utf8::decode($x);printf "%d %x\n", length $x, ord $x'
+    1 ff
+    $ perl -wE '$x="\xc4\xb3";utf8::decode($x);printf "%d %x\n", length $x, ord $x'
+    1 133
+
+Those functions are quite low-level: they do not warn, perform only basic
+checks, and are generally to be manipulated with caution. For more
+high-level encoding and decoding primitives, look at the
+[Encode](https://metacpan.org/pod/Encode) module.
