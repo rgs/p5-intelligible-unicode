@@ -36,13 +36,13 @@ In the first case, perl was told it was getting bytes, and that's
 what it got: two of them, in a two-character long string.
 
 In the second case, perl decoded those bytes as a UTF-8-encoded
-string, and read a string containing one character, namely &#ff;.
+string, and read a string containing one character, namely &#xff;.
 
 ## The `PERL_UNICODE` environment variable
 
 By default perl behaves as if `-C0` was given on the command-line, but
 you can override that default by setting the `PERL_UNICODE` environment
-variable before starting your program. (It's not going to work if you
+variable, *before* starting your program. (It's not going to work if you
 set it once your program has started.) Note that because this variable
 mimics whatever comes after the `-C` on the command-line, having it
 unset, set to an empty string, or set to 0, enable actually three

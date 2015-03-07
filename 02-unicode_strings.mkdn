@@ -1,7 +1,8 @@
 # The `unicode_strings` feature
 
-First things first, how do you set up a Perl program or module to avoid
-some of the most unpleasant surprises with dealing with Unicode strings?
+But first things first, before diving in the subtleties of decoding
+and encoding, let's see how you set up a Perl program or module to avoid
+some of the most unpleasant surprises with dealing with Unicode strings.
 
 The simplest way to do that is to start your program with:
 

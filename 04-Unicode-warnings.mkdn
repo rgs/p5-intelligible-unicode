@@ -1,6 +1,6 @@
 # Some Unicode warnings
 
-Perl will emit various warning when it detects that you're mixing
+Perl will emit various warnings when it detects that you're mixing
 bytes and Unicode strings, or using Unicode in strange ways.
 Those are in the `utf8` warning category, and its sub-categories.
 
@@ -8,12 +8,17 @@ Those are in the `utf8` warning category, and its sub-categories.
 
 Let's go back to our previous example. We were playing with U+00FF,
 but let's move on to its more modern form, U+0133, LATIN SMALL LIGATURE IJ
-(&#x133; -- yes, that's actually one character). The UTF-8 encoded
+(&#x133; &mdash; yes, that's actually one character). The UTF-8 encoded
 representation of this character is the two bytes 0xc4 and 0xb3,
 as shown below:
 
     $ perl -CS -E 'print "\x{133}"' | xxd
     0000000: c4b3                                     ..
+
+Note that you can get also three or four bytes there:
+
+    $ perl -CS -E 'print "\x{2A6A5}"' | xxd
+    0000000: f0aa 9aa5                                ....
 
 But what happens if we forget the `-CS`? That would mean that perl was
 expecting bytes on its standard output, but bytes are by definition
