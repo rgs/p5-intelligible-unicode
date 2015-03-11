@@ -16,10 +16,12 @@ You can read each chapter by opening it or using the following links:
 Future chapters:
 
 * The  `Encode::_utf8_on` and `Encode::_utf8_off` functions
+* Dealing with Unicode strings
+    * Case-folding and the `fc()` function
+    * Graphemes and the regular expression atom `\X`
+    * The regular expression flag `/a`
 * The `:utf8` PerlIO layer
 * The `:encoding(utf8)` PerlIO layer
 * Manipulating layers: `open()`, `use open`, `binmode`
+* Non-characters
 * The `unicode_eval` and `evalbytes` features, and the `utf8` pragma again
-* Dealing with Unicode strings
-    * Case-folding and the `fc()` function
-    * The regular expression flag `/a`
