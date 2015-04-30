@@ -22,7 +22,11 @@ characters (if possible):
     $ perl -wE '$x="\xc4\xb3";utf8::decode($x);printf "%d %x\n", length $x, ord $x'
     1 133
 
+Both functions transform their argument in place. `utf8::encode` returns
+nothing; `utf8::decode` returns a boolean value indicating if the decoding
+was successful or not.
+
 Those functions are quite low-level: they do not warn, perform only basic
 checks, and are generally to be manipulated with caution. For more
-high-level encoding and decoding primitives, look at the
-[Encode](https://metacpan.org/pod/Encode) module.
+high-level encoding and decoding primitives, look at the Encode
+module (discussed [further](08-Encode-module.mkdn)).

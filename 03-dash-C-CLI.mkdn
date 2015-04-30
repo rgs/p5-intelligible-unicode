@@ -1,10 +1,10 @@
-# The `-C` command-line switch
+# The `-C` command-line option
 
-In one-liners, you can use the `-C` command-line switch to tell perl
+In one-liners, you can use the `-C` command-line option to tell perl
 that Unicode is to be expected (or not) from some part of the program
-environment. All forms of the switch are documented in [the `perlrun` man
+environment. All forms of the option are documented in [the `perlrun` man
 page](https://metacpan.org/pod/distribution/perl/pod/perlrun.pod#C-number-list),
-but the more interesting for our purposes is `-CS`, that says that
+but the most interesting for our purposes is `-CS`, that says that
 standard input, output and error are all three expected to get
 Unicode data encoded in UTF-8. (The opposite is `-C0`, that will ensure
 that *nothing* is expected to get Unicode data by default.)
@@ -47,4 +47,4 @@ set it once your program has started.) Note that because this variable
 mimics whatever comes after the `-C` on the command-line, having it
 unset, set to an empty string, or set to 0, enable actually three
 completely different behaviours. (This is all documented in perlrun along
-the `-C` switch.)
+the `-C` option.)

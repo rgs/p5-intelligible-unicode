@@ -1,0 +1,15 @@
+# Case-folding and the `fc` function
+
+Since version 5.16 Perl provides a new [built-in function
+`fc`](https://metacpan.org/pod/distribution/perl/pod/perlfunc.pod#fc-EXPR)
+that implements Unicode case-folding. This is the right way to implement
+case-insensitive comparison of strings; for example, with the final and
+non-final forms of the sigma greek letter the final form is folded to
+the non-final form, which is not the case with `lc`, because both are
+lower-case already:
+
+    $ perl -CS -E '$_="\x{3A3}\x{3C3}\x{3C2}";say;say lc;say uc;say fc'
+    Σσς
+    σσς
+    ΣΣΣ
+    σσσ

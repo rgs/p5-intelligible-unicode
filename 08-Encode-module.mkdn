@@ -1,0 +1,44 @@
+# The Encode module
+
+The [Encode](https://metacpan.org/pod/Encode) module provides generic
+encoding conversion and validation routines, handling not only UTF-8
+but also a wide range of other specific encodings as well.
+
+The `encode` and `decode` functions exported by Encode serve the same purpose
+than the `utf8::` ones of the same name, respectively converting to and from a
+specified encoding. Unlike the low-level ones, they return the converted value:
+
+    $ perl -MEncode -wE 'print encode("UTF-8","\xff")' | xxd
+    0000000: c3bf                                     ..
+    $ perl -MEncode -wE '$x=decode("UTF-8","\xc3\xbf");printf "%d %x\n", length $x, ord $x'
+    1 ff
+
+The error handling can be fine-tuned. By default, any character that cannot
+be decoded will be replaced with the Unicode non-character U+FFFD REPLACEMENT
+CHARACTER &#xfffd;, which the standard says is *used to replace an incoming
+character whose value is unknown or unrepresentable in Unicode*:
+
+    $ perl -MEncode -wE '$x=decode("UTF-8","\xff");printf "%d %x\n", length $x, ord $x'
+    1 fffd
+
+But you can also make the call throw an exception instead:
+
+    $ perl -MEncode -wE 'say decode("UTF-8","\xff",Encode::FB_CROAK)'
+    utf8 "\xFF" does not map to Unicode at /Users/rgs/perl5/perlbrew/perls/perl-5.18.2/lib/5.18.2/darwin-2level/Encode.pm line 176.
+
+or make it return a human-readable version of the string that can't be decoded:
+
+    $ perl -MEncode -wE 'say decode("UTF-8","\xff",Encode::FB_PERLQQ)'
+    \xFF
+
+See the [Encode documentation](https://metacpan.org/pod/Encode) for a full list
+of flags and possibilities.
+
+Finally, Encode provides two internal functions `_utf8_on` and `_utf8_off`,
+that are mostly equivalent to `utf8::decode` and `utf8::encode` respectively.
+They do not perform any check and their use is discouraged.
+
+    $ perl -MEncode -wE '$x="\xc4\xb3";Encode::_utf8_on($x);printf "%d %x\n", length $x, ord $x'
+    1 133
+    $ perl -MEncode -wE '$x="\x{133}";Encode::_utf8_off($x);printf "%d %x\n", length $x, ord $x'
+    2 c4
