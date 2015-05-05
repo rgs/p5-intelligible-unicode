@@ -1,0 +1,17 @@
+# Non-characters
+
+Unicode permanently reserves 66 code points as non-characters, which must not
+be used in data exchanged between applications. As says the standard, *these
+codes are intended for process-internal uses.* Using them leads to warnings,
+even if warnings are not enabled:
+
+    $ perl -CS -E 'say "\x{fffe}"' | xxd
+    Unicode non-character U+FFFE is illegal for open interchange at -e line 1.
+    0000000: efbf be0a                                ....
+
+To disable the warning, you have to do it explicitly with `no warnings` or
+equivalent:
+
+    $ perl -M-warnings=nonchar -CS -E 'say "\x{fffe}"' | xxd
+    0000000: efbf be0a                                ....
+

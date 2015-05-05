@@ -14,7 +14,7 @@ specified encoding. Unlike the low-level ones, they return the converted value:
     1 ff
 
 The error handling can be fine-tuned. By default, any character that cannot
-be decoded will be replaced with the Unicode non-character U+FFFD REPLACEMENT
+be decoded will be replaced with the special character U+FFFD REPLACEMENT
 CHARACTER &#xfffd;, which the standard says is *used to replace an incoming
 character whose value is unknown or unrepresentable in Unicode*:
 

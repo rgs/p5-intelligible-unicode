@@ -14,13 +14,13 @@ You can read each chapter by opening it or using the following links:
 * [07: The `utf8::` upgrading and downgrading functions](07-upgrading-downgrading-functions.mkdn)
 * [08: The Encode module](08-Encode-module.mkdn)
 * [09: Case-folding and the `fc` function](09-Case-folding.mkdn)
+* [10: Graphemes and the regular expression atom `\X`](10-Graphemes.mkdn)
+* [11: Non-characters](11-Non-characters.mkdn)
 
 Future chapters:
 
-* Graphemes and the regular expression atom `\X`
 * The regular expression flag `/a`
 * The `:utf8` PerlIO layer
 * The `:encoding(utf8)` PerlIO layer
 * Manipulating layers: `open()`, `use open`, `binmode`
-* Non-characters
 * The `unicode_eval` and `evalbytes` features, and the `utf8` pragma again

@@ -1,0 +1,31 @@
+# Graphemes and the regular expression atom `\X`
+
+In Unicode a **grapheme** is a logical character that might be represented
+as several distinct, combined Unicode characters.
+
+For example, the latin small letter &ccedil; (c with cedilla) can be written as
+the single character U+00E7, or the juxtaposition of simple letter c (U+0063)
+and U+0327, COMBINING CEDILLA:
+
+    $ perl -CS -wE 'say chr 0xe7, " ", "c", chr 0x327'
+    ç ç
+
+The latter has a length of 2:
+
+    $ perl -CS -wE 'say length for "\xe7", "c\x{327}"'
+    1
+    2
+
+This is expected, but can lead to unexpected results when you meant
+to work with graphemes but actually work with characters.
+
+There is one Perl construct that understands graphemes: the regular
+expression atom `\X`, which matches a single grapheme, eventually
+made out of several characters. This way you can extract single
+graphemes from a string:
+
+    $ perl -CS -wE 'say length, " $_" for "\xe7c\x{327}c" =~ /\X/g'
+    1 ç
+    2 ç
+    1 c
+
