@@ -6,10 +6,17 @@ encoding UTF-8 to represent strings, due to its space efficiency,
 and to the fact that it conveniently overlaps with ASCII up to character 127.
 
 Strings coming from the outside of your program (file names, file
-contents, command-line arguments, etc.), and even the text of your
+contents, command-line arguments, STDIN, etc.), and even the text of your
 program itself, are always just streams of bytes (valued between 0 and
 255), because that's just how programs communicate. This is why they
 need to be decoded when they are expected to contain Unicode characters.
 In Perl parlance, decoding is precisely the operation that converts a
 stream of bytes to a stream of Unicode characters. There are various
 ways to do this.
+
+On the other hand, strings going to the outside of your program (file names,
+file contents, STDERR, STDOUT, etc.) need to be encoded into expected encoding.
+
+Unless a dedicated CPAN module is used, decoding of inputs and encoding of outputs
+also needs to be enforced while dealing with database servers or serialization
+formats (JSON, XML, YAML, etc.).
