@@ -2,7 +2,7 @@
 
 Perl strings can hold all Unicode characters (up to the maximum code
 point U+10FFFF). Internally, Perl uses the variable-length
-encoding UTF-8 to represent strings, due to its space efficiency,
+encoding [UTF-8](http://www.unicode.org/resources/utf8.html) to represent strings, due to its space efficiency,
 and to the fact that it conveniently overlaps with ASCII up to character 127.
 
 Strings coming from the outside of your program (file names, file

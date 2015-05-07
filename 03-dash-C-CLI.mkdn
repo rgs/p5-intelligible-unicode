@@ -6,15 +6,17 @@ environment. All forms of the option are documented in [the `perlrun` man
 page](https://metacpan.org/pod/distribution/perl/pod/perlrun.pod#C-number-list),
 but the most interesting for our purposes is `-CS`, that says that
 standard input, output and error are all three expected to get
-Unicode data encoded in UTF-8. (The opposite is `-C0`, that will ensure
-that *nothing* is expected to get Unicode data by default.)
+Unicode data encoded in [UTF-8](http://www.unicode.org/resources/utf8.html).
+(The opposite is `-C0`, that will ensure that *nothing* is expected to get
+Unicode data by default.)
 
 ## Output
 
-Here are some examples. Let's take character U+00FF, also known as
+Here are some examples. Let's take character
+[U+00FF](http://www.fileformat.info/info/unicode/char/00ff/index.htm), also known as
 LATIN SMALL LETTER Y WITH DIAERESIS (&#xff;), and see what perl is
-actually outputting by inspecting its standard output with the hex
-dumper `xxd(1)`:
+actually outputting by inspecting its standard output with
+[xxd](http://linux.die.net/man/1/xxd) hex dumper:
 
     $ perl -E 'print "\xff"' | xxd
     0000000: ff                                       .
