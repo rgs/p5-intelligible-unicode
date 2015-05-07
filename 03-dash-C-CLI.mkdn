@@ -64,7 +64,8 @@ from 1 byte to 4 bytes to hold encoded bitstream.
   </tbody>
 </table>
 
-U+00FF character needs 8 bits to store `0xff` value. Encoded bitstream thus requires 2 bytes:
+U+00FF <em>character</em> needs 8 <em>bits</em> to store `0xff` value. Encoded bitstream
+thus requires 2 <em>bytes</em>:
 
     perl -e 'printf "%b\n", hex "c3bf"'
     1100001110111111
