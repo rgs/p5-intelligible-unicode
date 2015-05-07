@@ -6,11 +6,13 @@ Those are in the `utf8` warning category, and its sub-categories.
 
 ## Wide character in ...
 
-Let's go back to our previous example. We were playing with U+00FF,
-but let's move on to its more modern form, U+0133, LATIN SMALL LIGATURE IJ
-(&#x133; &mdash; yes, that's actually one character). The UTF-8 encoded
-representation of this character is the two bytes 0xc4 and 0xb3,
-as shown below:
+Let's go back to our previous example. We were playing with
+[U+00FF](http://www.fileformat.info/info/unicode/char/00ff/index.htm),
+but let's move on to its more modern form, [U+0133](http://www.fileformat.info/info/unicode/char/0133/index.htm),
+LATIN SMALL LIGATURE IJ (&#x133; &mdash; yes, that's actually
+[one](http://en.wikipedia.org/wiki/IJ_%28digraph%29) character).
+The UTF-8 encoded representation of this character is the two bytes `0xc4`
+and `0xb3`, as shown below:
 
     $ perl -CS -E 'print "\x{133}"' | xxd
     0000000: c4b3                                     ..
@@ -22,7 +24,7 @@ Note that you can get also three or four bytes there:
 
 But what happens if we forget the `-CS`? That would mean that perl was
 expecting bytes on its standard output, but bytes are by definition
-between 0 and 0xff, and thus 0x133 does not fit. However perl will
+between `0x0` and `0xff`, and thus `0x133` does not fit. However perl will
 encode the character to UTF-8, and warn you about that:
 
     $ perl -E 'print "\x{133}"' | xxd
@@ -32,7 +34,7 @@ encode the character to UTF-8, and warn you about that:
 ## Malformed UTF-8 character
 
 What happens if you feed perl something that you expect to be proper
-UTF-8, but isn't? We saw for example that the single byte 0xff is
+UTF-8, but isn't? We saw for example that the single byte `0xff` is
 not a valid UTF-8 encoded string:
 
     $ perl -E 'print "\xff"' | perl -CS -pE1 | xxd
@@ -44,11 +46,12 @@ In that case perl keeps the input unmodified and warns about it.
 ## "..." does not map to Unicode
 
 There are many interesting ways to come up with malformed UTF-8. Here's
-one of my favorites. The backslash character \ is U+005C is Unicode, so
-in UTF-8 it is represented by the single byte 0x5c. However, due to the
-rules of UTF-8 encoding, it *could* be represented as well by the two
-bytes 0xc1 0x9c. (This is known as a *non-shortest form*, and
-non-shortest forms are actually illegal UTF-8). This one-liner
+one of my favorites. The REVERSE SOLIDUS (aka "backslash") character \
+is [U+005C](http://www.fileformat.info/info/unicode/char/005c/index.htm)
+in Unicode, so in UTF-8 it is represented by the single byte `0x5c`.
+However, due to the rules of UTF-8 encoding, it *could* be represented
+as well by the two bytes `0xc1 0x9c`. (This is known as a *non-shortest form*,
+and non-shortest forms are actually illegal UTF-8). This one-liner
 demonstrates that perl is actually quite strict when decoding UTF-8:
 
     $ perl -E 'print "\xc1\x9c"' | perl -CS -wpE1 | xxd
@@ -59,7 +62,7 @@ Note that `-w` is needed here to turn on optional warnings.
 
 Why is this important? Because if Perl were more lax in decoding, it
 could render a backslash here, but fail detecting it when naively
-scanning the string for the byte 0x5c. Several security vulnerabilities
+scanning the string for the byte `0x5c`. Several security vulnerabilities
 used code injection via UTF-8 non-shortest forms to bypass XSS scanning
 mechanisms or similar. Be glad Perl protects automatically you from
 those.
