@@ -77,7 +77,7 @@ U+00FF character needs 8 bits to store `0xff` value. Encoded bitstream thus requ
 ## Input
 
 Now the reverse. What does perl see when it reads the two bytes
-0xc3 and 0xbf?
+`0xc3` and `0xbf`?
 
     $ perl -E 'print "\xc3\xbf"' | perl -E '$x = <>; printf "%d %x\n", length $x, ord $x'
     2 c3
