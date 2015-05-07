@@ -31,7 +31,7 @@ and 0xbf, in that order. Hey, that works!
 ### UTF-8
 
 UTF-8 encoding is of variable-length kind. Each character requires
-from 1 byte to 4 bytes to hold encoded bitstream:
+from 1 byte to 4 bytes to hold encoded bitstream.
 
 <table>
   <title>UTF-8 variable-length encoding</title>
