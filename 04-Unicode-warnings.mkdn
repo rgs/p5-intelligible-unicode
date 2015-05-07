@@ -9,7 +9,8 @@ Those are in the `utf8` warning category, and its sub-categories.
 Let's go back to our previous example. We were playing with
 [U+00FF](http://www.fileformat.info/info/unicode/char/00ff/index.htm),
 but let's move on to its more modern form, [U+0133](http://www.fileformat.info/info/unicode/char/0133/index.htm),
-LATIN SMALL LIGATURE IJ (&#x133; &mdash; yes, that's actually one character).
+LATIN SMALL LIGATURE IJ (&#x133; &mdash; yes, that's actually
+[one](http://en.wikipedia.org/wiki/IJ_%28digraph%29) character).
 The UTF-8 encoded representation of this character is the two bytes `0xc4`
 and `0xb3`, as shown below:
 
