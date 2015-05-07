@@ -9,6 +9,8 @@ standard input, output and error are all three expected to get
 Unicode data encoded in UTF-8. (The opposite is `-C0`, that will ensure
 that *nothing* is expected to get Unicode data by default.)
 
+## Output
+
 Here are some examples. Let's take character U+00FF, also known as
 LATIN SMALL LETTER Y WITH DIAERESIS (&#xff;), and see what perl is
 actually outputting by inspecting its standard output with the hex
@@ -23,6 +25,54 @@ Without `-CS`, perl outputs the single byte 0xff, which is not
 valid UTF-8. With it, perl outputs the correct UTF-8 encoding
 of the U+00FF character, which consists of the two bytes 0xc3
 and 0xbf, in that order. Hey, that works!
+
+### UTF-8
+
+UTF-8 encoding is of variable-length kind. Each character requires
+from 1 byte to 4 bytes to hold encoded bitstream:
+
+<table>
+  <title>UTF-8 variable-length encoding</title>
+  <thead>
+    <th>Byte(s)</th>
+    <th>Bits</th>
+    <th>Encoded</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>6..0</td>
+      <td><code>0<em>bbbbbbb</em></code></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>10..6,5..0</td>
+      <td><code>110<em>bbbbb</em> 10<em>bbbbbb</em></code></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>15..12,11..6,5..0</td>
+      <td><code>1110<em>bbbb</em> 10<em>bbbbbb</em> 10<em>bbbbbb</em></code></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>20..18,17..12,11..6,5..0</td>
+      <td><code>11110<em>bbb</em> 10<em>bbbbbb</em> 10<em>bbbbbb</em> 10<em>bbbbbb</em></code></td>
+    </tr>
+  </tbody>
+</table>
+
+U+00FF character needs 8 bits to store `0xff` value. Encoded bitstream thus requires 2 bytes:
+
+    perl -e 'printf "%b\n", hex "c3bf"'
+    1100001110111111
+    # 110_00011 + 10_111111
+    #     00011      111111
+    #        11      111111
+    perl -e 'printf "%b\n", hex "ff"'
+    11111111
+
+## Input
 
 Now the reverse. What does perl see when it reads the two bytes
 0xc3 and 0xbf?
