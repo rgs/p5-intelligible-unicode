@@ -1,0 +1,19 @@
+# The regular expression flag `/a`
+
+Since Perl 5.14 you can use the regular expression flag `/a` to force ASCII
+semantics on string matching. So what does that mean?
+
+By default the sequences `\d`, `\s`, `\w`, and the Posix character classes
+match Unicode characters:
+
+    $ perl -Mcharnames=:full -E 'say "\N{FULLWIDTH DIGIT SEVEN}" =~ /\d/ ? "matches" : "not"'
+    matches
+
+With the `/a` flag this is restricted to only ASCII-range characters,
+so for example `\d` will only match the ASCII digits from 0 to 9:
+
+    $ perl -Mcharnames=:full -E 'say "\N{FULLWIDTH DIGIT SEVEN}" =~ /\d/a ? "matches" : "not"'
+    not
+    $ perl -E 'say 7 =~ /\d/a ? "matches" : "not"'
+    matches
+
