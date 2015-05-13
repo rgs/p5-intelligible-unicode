@@ -6,7 +6,7 @@ some of the most unpleasant surprises with dealing with Unicode strings.
 
 The simplest way to do that is to start your program with:
 
-    use 5.14.0;
+    use 5.12.0;
 
 or even better, if you have a perl recent enough:
 
@@ -24,7 +24,34 @@ have to bother about the internal representation of your strings.
 In more detail, this `use` declaration makes perl load the [`unicode_strings`
 feature](https://metacpan.org/pod/distribution/perl/regen/feature.pl#The-unicode_strings-feature)
 and puts it in effect for the rest of your file. (But not the packages
-it loads!)
+it loads!) If you want to enable just this feature you can also write
+
+    use feature 'unicode_strings';
 
 In one-liners, you can use the handy shortcut `-E` instead of the full
 `use` declaration.
+
+Here's a quick example of the Unicode Bug. The character U+00FF LATIN SMALL
+LETTER Y WITH DIAERESIS has an upper-case version outside of the 0-255
+yrange, U+0178 LATIN CAPITAL LETTER Y WITH DIAERESIS. With the
+`unicode_strings` feature in effect, `uc()` returns the correct character:
+
+    $ perl -CS -lE '$_="\xff";print;print uc'
+    ÿ
+    Ÿ
+
+However without it, `uc()` leaves its argument unchanged:
+
+    $ perl -CS -le '$_="\xff";print;print uc'
+    ÿ
+    ÿ
+
+But not always, inconsistently:
+
+    $ perl -CS -le '$_=substr("\xff\x{100}",0,1);print;print uc'
+    ÿ
+    Ÿ
+
+The reason for that is that the internal state of the string as
+implemented in perl is leaking, changing `uc()`'s semantics.
+This is undesirable, so protect yourself and turn on `unicode_strings`!

@@ -9,5 +9,5 @@ encoded as UTF-8 (upgrade) or not (downgrade).
 To be noted, `utf8::downgrade` will also die by default if passed a string that
 cannot be represented as bytes.
 
-    $ perl -e '$x="\x{133}"; eval { utf8::downgrade($x);1 } or print "error: $@"'
+    $ perl -E '$x="\x{133}"; eval { utf8::downgrade($x);1 } or print "error: $@"'
     error: Wide character in subroutine entry at -e line 1.
