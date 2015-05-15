@@ -20,3 +20,15 @@ file contents, STDERR, STDOUT, etc.) need to be encoded into expected encoding.
 Unless a dedicated CPAN module is used, decoding of inputs and encoding of outputs
 also needs to be enforced while dealing with database servers or serialization
 formats (JSON, XML, YAML, etc.).
+
+## String syntax
+
+In Perl strings you can specify any code point by (hexadecimal) number by using
+the `\x{...}` escape in double-quoted strings. The braces are not necessary if
+the hexadecimal number is two digits long. So for example `"\x42"` is U+0042
+LATIN CAPITAL LETTER B, and `"\x{442}"` is U+442 CYRILLIC SMALL LETTER TE.
+
+The [charnames](https://metacpan.org/pod/charnames) pragma allows you to access
+characters by name as well, so within the scope of `use charnames ':full'`
+you can also write those characters as `"\N{LATIN CAPITAL LETTER B}"` and
+`"\N{CYRILLIC SMALL LETTER TE}"`.
