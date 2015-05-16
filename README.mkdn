@@ -17,10 +17,8 @@ You can read each chapter by opening it or using the following links:
 * [10: Graphemes and the regular expression atom `\X`](10-Graphemes.mkdn)
 * [11: Non-characters](11-Non-characters.mkdn)
 * [12: The regular expression flag `/a`](12-regular-expression-flag-a.mkdn)
+* [13: PerlIO layers](13-perlio-layers.mkdn)
 
 Future chapters:
 
-* The `:utf8` PerlIO layer
-* The `:encoding(utf8)` PerlIO layer
-* Manipulating layers: `open()`, `use open`, `binmode`
 * The `unicode_eval` and `evalbytes` features, and the `utf8` pragma again

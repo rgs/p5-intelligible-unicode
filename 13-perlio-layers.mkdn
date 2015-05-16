@@ -1,0 +1,34 @@
+# PerlIO layers
+
+Perl provides facilities to read from, or write to, files, while decoding
+or encoding respectively.
+
+## The `:utf8` PerlIO layer
+
+To decode UTF-8 read from a file, use the 3-argument open syntax and specify
+the `:utf8` PerlIO layer:
+
+    open my $fh, "<:utf8", $file or die $!;
+
+This is the same thing that the `-CI` command-line flag does on the standard
+input, as you can check like this:
+
+    $ perl -E 'say for PerlIO::get_layers(STDIN)'
+    unix
+    perlio
+    $ perl -CI -E 'say for PerlIO::get_layers(STDIN)'
+    unix
+    perlio
+    utf8
+
+Likewise, on outputs, the right form of open would be:
+
+    open my $fh, ">:utf8", $file or die $!;
+
+## The `:encoding(utf8)` PerlIO layer
+
+The `:utf8` layer is very low-level. The
+[PerlIO::encoding](https://metacpan.org/pod/PerlIO::encoding) layer is actually
+based on the Encode module and performs the same checks and fallbacks.
+
+## Manipulating layers: `open()`, `use open`, `binmode`
