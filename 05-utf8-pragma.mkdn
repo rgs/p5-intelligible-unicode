@@ -5,7 +5,18 @@ The *sole* use of the `utf8` pragma, as in:
     use utf8;
 
 at the top of your file, is to tell perl that the rest of the file,
-notably the string literals, is encoded in UTF-8. That's all. (My
-personal advice, however, is to avoid putting UTF-8 in your files,
-unless you're extra-sure it's not going to be mangled by editors,
-terminals, and co-workers.)
+notably the string and regular expression literals, is encoded in UTF-8.
+That's all. There is no measurable compile- or run-time penalty
+in loading it.
+
+My personal advice, however, is to avoid putting UTF-8 in your files, unless
+you're extra-sure it's not going to be mangled by editors, terminals, and
+co-workers. The `utf8` pragma also enables you to use UTF-8 in function names
+and variable identifiers, but that is in my experience very rarely a good idea;
+for example, those two forms of the "&egrave;" character are defined to be
+[*canonically equivalent*](https://en.wikipedia.org/wiki/Unicode_equivalence)
+in Unicode, but if you misspell one for another, then perl is lost, because
+it does not normalize identifiers consistently (yet):
+
+    $ perl -CS -E '$_="sub ad\xe8le { say q/ok/ } ade\x{300}le()";eval $_ or print $@'
+    Undefined subroutine &main::adèle called at (eval 1) line 1.
