@@ -15,7 +15,8 @@ stream of bytes to a stream of Unicode characters. There are various
 ways to do this.
 
 On the other hand, strings going to the outside of your program (file names,
-file contents, STDERR, STDOUT, etc.) need to be encoded into expected encoding.
+file contents, STDERR, STDOUT, etc.) need to be encoded into bytes from the
+expected encoding.
 
 Unless a dedicated CPAN module is used, decoding of inputs and encoding of outputs
 also needs to be enforced while dealing with database servers or serialization
