@@ -16,7 +16,12 @@ and variable identifiers, but that is in my experience very rarely a good idea;
 for example, those two forms of the "&egrave;" character are defined to be
 [*canonically equivalent*](https://en.wikipedia.org/wiki/Unicode_equivalence)
 in Unicode, but if you misspell one for another, then perl is lost, because
-it does not normalize identifiers consistently (yet):
+the compiler does not normalize identifiers consistently (yet):
 
     $ perl -CS -E '$_="sub ad\xe8le { say q/ok/ } ade\x{300}le()";eval $_ or print $@'
     Undefined subroutine &main::adèle called at (eval 1) line 1.
+
+(As another side note, eval() works correctly here with a Unicode program text
+because the `-E` switch enables the `unicode_eval` feature: without it eval()
+would retain its legacy semantics to always understand its argument as a stream
+of bytes.)

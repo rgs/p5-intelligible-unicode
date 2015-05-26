@@ -1,12 +1,12 @@
 # PerlIO layers
 
-Perl provides facilities to read from, or write to, files, while decoding
-or encoding respectively.
+Perl provides facilities to read from (or write to) files, while respectively
+decoding or encoding the data.
 
 ## The `:utf8` PerlIO layer
 
-To decode UTF-8 read from a file, use the 3-argument open syntax and specify
-the `:utf8` PerlIO layer:
+To decode UTF-8 characters read from a file, you can use the 3-argument open
+syntax and specify the `:utf8` PerlIO layer after the mode character:
 
     open my $fh, "<:utf8", $file or die $!;
 
@@ -25,10 +25,27 @@ Likewise, on outputs, the right form of open would be:
 
     open my $fh, ">:utf8", $file or die $!;
 
-## The `:encoding(utf8)` PerlIO layer
+and that would be equivalent to `-CO` on standard output, or `-CE`
+on standard error. (`-CS` is just shorthand for all three, `-CIOE`.)
 
-The `:utf8` layer is very low-level. The
-[PerlIO::encoding](https://metacpan.org/pod/PerlIO::encoding) layer is actually
-based on the Encode module and performs the same checks and fallbacks.
+## The `:encoding(UTF-8)` PerlIO layer
 
-## Manipulating layers: `open()`, `use open`, `binmode`
+However, the `:utf8` layer is very low-level and performs very little
+validation. It does not provide either any way to tune what to do on errors.
+The [PerlIO::encoding](https://metacpan.org/pod/PerlIO::encoding) layer, which
+is actually based on the `Encode` module, performs the same checks and
+fallbacks than `Encode` and is much more recommended.
+
+## Manipulating layers: `binmode`
+
+The binmode() built-in function can be used to add PerlIO layers to any
+filehandle. For example, if you want to read and validate UTF-8 from the
+standard input:
+
+    binmode STDIN, ':encoding(UTF-8)';
+
+## Specifying default layers: `use open`
+
+The [`open`](https://metacpan.org/pod/open) pragma is used to specify default
+PerlIO layers for input and output files. Due to its global nature, its
+utility is marginal.
