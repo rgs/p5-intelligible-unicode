@@ -18,3 +18,13 @@ You can read each chapter by opening it or using the following links:
 * [11: Non-characters](11-Non-characters.mkdn)
 * [12: The regular expression flag `/a`](12-regular-expression-flag-a.mkdn)
 * [13: PerlIO layers](13-perlio-layers.mkdn)
+
+## Additional resources
+
+* [Unicode Introduction](http://dev.perltuts.com/tutorials/unicode-introduction) at perltuts.com
+* The Standard Documentation that ships with Perl:
+    * [perlunicode](https://metacpan.org/pod/distribution/perl/pod/perlunicode.pod)
+    * [perlunicook](https://metacpan.org/pod/distribution/perl/pod/perlunicook.pod)
+    * [perlunifaq](https://metacpan.org/pod/distribution/perl/pod/perlunifaq.pod)
+    * [perluniintro](https://metacpan.org/pod/distribution/perl/pod/perluniintro.pod)
+    * [perlunitut](https://metacpan.org/pod/distribution/perl/pod/perlunitut.pod)
