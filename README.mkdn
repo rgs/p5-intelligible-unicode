@@ -28,3 +28,4 @@ You can read each chapter by opening it or using the following links:
     * [perlunifaq](https://metacpan.org/pod/distribution/perl/pod/perlunifaq.pod)
     * [perluniintro](https://metacpan.org/pod/distribution/perl/pod/perluniintro.pod)
     * [perlunitut](https://metacpan.org/pod/distribution/perl/pod/perlunitut.pod)
+* [Tom Christiansen's answers page on Stackoverflow](http://stackoverflow.com/users/471272/tchrist?tab=answers)
