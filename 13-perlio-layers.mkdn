@@ -34,7 +34,7 @@ However, the `:utf8` layer is very low-level and performs very little
 validation. It does not provide either any way to tune what to do on errors.
 The [PerlIO::encoding](https://metacpan.org/pod/PerlIO::encoding) layer, which
 is actually based on the `Encode` module, performs the same checks and
-fallbacks than `Encode` and is much more recommended.
+fallbacks as `Encode` and is much more recommended.
 
 ## Manipulating layers: `binmode`
 

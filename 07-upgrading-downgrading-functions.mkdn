@@ -1,6 +1,6 @@
 # The `utf8::` upgrading and downgrading functions
 
-Those ones are *even more* low-level and their usefulness is very limited in
+These ones are *even more* low-level and their usefulness is very limited in
 general. While `utf8::encode` and `utf8::decode` can change the stream of bytes
 or codepoints representing a string, `utf8::downgrade` and `utf8::upgrade` will
 not touch it. Their role is purely to ensure that the string is internally
