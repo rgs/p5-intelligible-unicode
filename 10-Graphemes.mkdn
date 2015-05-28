@@ -29,5 +29,5 @@ graphemes from a string:
     2 ç
     1 c
 
-Also, Perl 5.22.0 introduces a new regular expression assertion, `\b{gbc}`
+Also, Perl 5.22.0 introduces a new regular expression assertion, `\b{gcb}`
 (for "grapheme cluster boundary"), that matches only between graphemes.
