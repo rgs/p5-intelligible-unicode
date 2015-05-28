@@ -18,6 +18,7 @@ You can read each chapter by opening it or using the following links:
 * [11: Non-characters](11-Non-characters.mkdn)
 * [12: The regular expression flag `/a`](12-regular-expression-flag-a.mkdn)
 * [13: PerlIO layers](13-perlio-layers.mkdn)
+* [14: Standard Unicode modules](14-unicode-modules.mkdn)
 
 ## Additional resources
 

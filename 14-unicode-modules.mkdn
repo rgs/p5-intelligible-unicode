@@ -1,0 +1,53 @@
+# Standard Unicode modules
+
+Perl is distributed with two Unicode modules that help manipulating
+strings according to the standard rules.
+
+## Unicode::Normalize
+
+As briefly mentioned in [chapter 5](05-utf8-pragma.mkdn), Unicode
+[defines](http://www.unicode.org/reports/tr15/) relations of equivalence
+between characters or groups of characters. There are two such relations,
+*canonical equivalence* for different ways of representing the same character
+by different codepoint sequences, and *compatibility equivalence* which is
+weaker, allowing also for variations in character appearance. The standard
+module [Unicode::Normalize](https://metacpan.org/pod/Unicode::Normalize)
+implements four functions that convert strings to one of the four normalized
+forms.
+
+For example, the NFD (canonical decomposition) form of the character U+00E7
+(&ccedil;) is, in that order, the two characters corresponding to the letter c
+and to the cedilla:
+
+    $ perl -MUnicode::Normalize -E 'printf "%04x\n", ord for split //, NFD("\xe7")'
+    0063
+    0327
+
+The compatibility decomposition works likewise; for example, considering &#x24b6;,
+that is, U+24B6 (CIRCLED LATIN CAPITAL LETTER A), we see it's just converted
+to the letter A:
+
+    $ perl -MUnicode::Normalize -E 'say NFKD("\x{24B6}")'
+    A
+
+Normalized forms are especially useful when testing if strings are equal.
+
+## Unicode::Collate
+
+Sometimes you need to sort strings. This can prove being non-trivial very fast.
+The Unicode Consortium has helpfully defined a thick [collation
+algorithm](http://www.unicode.org/reports/tr10/) which is implemented by the
+standard module [Unicode::Collate](https://metacpan.org/pod/Unicode::Collate).
+
+## Unicode::UCD
+
+[Unicode::UCD](https://metacpan.org/pod/Unicode::UCD) provides access to the
+Unicode character database.
+
+For example, if you prefer having the character names rather than the numerical
+values in one previous code example, you can use the `charinfo` function:
+
+    $ perl -MUnicode::UCD=charinfo -MUnicode::Normalize -E 'say charinfo(ord)->{name} for split //, NFD("\xe7")'
+    LATIN SMALL LETTER C
+    COMBINING CEDILLA
+
