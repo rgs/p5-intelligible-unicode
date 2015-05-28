@@ -64,5 +64,5 @@ Why is this important? Because if Perl were more lax in decoding, it
 could render a backslash here, but fail detecting it when naively
 scanning the string for the byte `0x5c`. Several security vulnerabilities
 used code injection via UTF-8 non-shortest forms to bypass XSS scanning
-mechanisms or similar. Be glad Perl protects automatically you from
+mechanisms or similar. Be glad Perl protects you automatically from
 those.

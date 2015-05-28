@@ -5,7 +5,7 @@ encoding conversion and validation routines, handling not only UTF-8
 but also a wide range of other specific encodings as well.
 
 The `encode` and `decode` functions exported by Encode serve the same purpose
-than the `utf8::` ones of the same name, respectively converting to and from a
+as the `utf8::` ones of the same name, respectively converting to and from a
 specified encoding. Unlike the low-level ones, they return the converted value:
 
     $ perl -MEncode -wE 'print encode("UTF-8","\xff")' | xxd
