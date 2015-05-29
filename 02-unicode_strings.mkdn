@@ -40,6 +40,9 @@ yrange, U+0178 LATIN CAPITAL LETTER Y WITH DIAERESIS. With the
     ÿ
     Ÿ
 
+(assuming your terminal understands UTF-8 &mdash; if it does not, the
+output will be slightly more garbled.)
+
 However without it, `uc()` leaves its argument unchanged:
 
     $ perl -CS -le '$_="\xff";print;print uc'
