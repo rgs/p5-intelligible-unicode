@@ -17,3 +17,26 @@ so for example `\d` will only match the ASCII digits from 0 to 9:
     $ perl -E 'say 7 =~ /\d/a ? "matches" : "not"'
     matches
 
+## Even more ASCII with `/aa`
+
+If you specify the `a` flag twice, the behaviour will be more strict and disallow
+any mixing of ASCII and Unicode data; this could happen when using case-insensitive
+matching. The canonical example uses the Kelvin sign, "&#x212a;" (U+212A):
+
+    $ perl -Mcharnames=:full -E 'say "\N{KELVIN SIGN}" =~ /K/i ? "match" : "no"'
+    match
+    $ perl -Mcharnames=:full -E 'say "\N{KELVIN SIGN}" =~ /K/ai ? "match" : "no"'
+    match
+    $ perl -Mcharnames=:full -E 'say "\N{KELVIN SIGN}" =~ /K/aai ? "match" : "no"'
+    no
+
+Matching against ligatures is prevented likewise, for example "&#xfb01;",
+U+FB01 LATIN SMALL LIGATURE FI:
+
+    $ perl -Mcharnames=:full -E 'say "\N{LATIN SMALL LIGATURE FI}" =~ /fi/i ? "match" : "no"'
+    match
+    $ perl -Mcharnames=:full -E 'say "\N{LATIN SMALL LIGATURE FI}" =~ /fi/ai ? "match" : "no"'
+    match
+    $ perl -Mcharnames=:full -E 'say "\N{LATIN SMALL LIGATURE FI}" =~ /fi/aai ? "match" : "no"'
+    no
+
