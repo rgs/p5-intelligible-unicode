@@ -49,3 +49,22 @@ standard input:
 The [`open`](https://metacpan.org/pod/open) pragma is used to specify default
 PerlIO layers for input and output files. Due to its global nature, its
 utility is marginal.
+
+## Reading from scalars
+
+The special layer [PerlIO::scalar](https://metacpan.org/pod/PerlIO::scalar)
+allows to read from in-memory scalar strings, instead of files. As the
+documentation states, *the scalar is considered a stream of bytes* (as if it
+was external input, as from a regular file). As of perl 5.17.9, perl will fail
+to read from strings that contain code points above 0xFF, and warn about that:
+
+    $ perl -CS -wE 'open $fh,"<",\"oeuf" or die "Cannot open scalar: $!";say <$fh>'
+    oeuf
+    $ perl -CS -wE 'open $fh,"<",\"\x{0153}uf" or die "Cannot open scalar: $!";say <$fh>'
+    Strings with code points over 0xFF may not be mapped into in-memory file handles
+    Cannot open scalar: Invalid argument at -e line 1.
+
+The solution is to do the decoding yourself:
+
+    $ perl -CS -wE 'utf8::encode($x="\x{0153}uf");open $fh,"<",\$x;utf8::decode($y=<$fh>);say $y'
+    œuf
