@@ -30,3 +30,9 @@ You can read each chapter by opening it or using the following links:
     * [perluniintro](https://metacpan.org/pod/distribution/perl/pod/perluniintro.pod)
     * [perlunitut](https://metacpan.org/pod/distribution/perl/pod/perlunitut.pod)
 * [Tom Christiansen's answers page on Stackoverflow](http://stackoverflow.com/users/471272/tchrist?tab=answers)
+
+## License
+
+This document is made available under the
+<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA</a>
+license.
