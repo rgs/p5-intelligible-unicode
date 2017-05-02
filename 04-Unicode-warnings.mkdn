@@ -46,7 +46,7 @@ In that case perl keeps the input unmodified and warns about it.
 ## "..." does not map to Unicode
 
 There are many interesting ways to come up with malformed UTF-8. Here's
-one of my favorites. The REVERSE SOLIDUS (aka "backslash") character \
+one of my favorites. The REVERSE SOLIDUS (aka "backslash") character `\`
 is [U+005C](http://www.fileformat.info/info/unicode/char/005c/index.htm)
 in Unicode, so in UTF-8 it is represented by the single byte `0x5c`.
 However, due to the rules of UTF-8 encoding, it *could* be represented
